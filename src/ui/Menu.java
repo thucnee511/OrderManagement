@@ -1,0 +1,53 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package ui;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+/**
+ *
+ * @author Administrator
+ */
+public class Menu {
+    private final String title ;
+    private final ArrayList<String> options = new ArrayList<>();
+    private final Scanner sc = new Scanner(System.in) ;
+    
+    public Menu(String title){
+        this.title = title ;
+    }
+    
+    public void addOption(String newOption){
+        options.add(newOption) ;
+    }
+    
+    public void printMenu(){
+        System.out.println(title);
+        for(String s : options){
+            System.out.println(options.indexOf(s)+1 + ". " + s);
+        }
+    }
+    
+    public int getChoice(){
+        while(true){
+            try{
+                System.out.print("Choose an option: ");
+                int choice = Integer.parseInt(sc.nextLine()) ;
+                if (choice < 1 || choice > options.size()) throw new Exception() ;
+            }catch(NumberFormatException e){
+                System.out.println("Option must be an integer number!");
+            }catch(Exception e){
+                System.out.println("Option must be in [1,"+options.size()+"]");
+            }
+        }
+    }
+    
+    @Override
+    public String toString(){
+        String msg = String.format("[Menu] : %s", title) ;
+        return msg ;
+    }
+}

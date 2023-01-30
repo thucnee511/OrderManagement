@@ -9,5 +9,50 @@ package dta;
  * @author Administrator
  */
 public class Order {
+    private String ordId ;
+    private String cusId ;
+    private String proId ;
+    private int quantity ;
+    private String date ;
+    private boolean status = false;
+
+    public Order(String ordId, String cusId, String proId, int quantity, String date, boolean status) {
+        this.ordId = ordId;
+        this.cusId = cusId;
+        this.proId = proId;
+        this.quantity = quantity;
+        this.date = date;
+        this.status = status;
+    }
+
+    public String getOrdId() {
+        return ordId;
+    }
+
+    public void setCusId(String cusId) {
+        this.cusId = cusId;
+    }
+
+    public void setProId(String proId) {
+        this.proId = proId;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
     
+    @Override
+    public String toString(){
+        String msg = String.format("%s,%s,%s,%d,%s,%s",
+                ordId , cusId , proId , quantity , date , status) ;
+        return msg ;
+    }
 }

@@ -8,7 +8,7 @@ package dta;
  *
  * @author Administrator
  */
-public class Order {
+public class Order implements Comparable<Order>{
     private String ordId ;
     private String cusId ;
     private String proId ;
@@ -27,6 +27,14 @@ public class Order {
 
     public String getOrdId() {
         return ordId;
+    }
+
+    public String getCusId() {
+        return cusId;
+    }
+
+    public boolean isStatus() {
+        return status;
     }
 
     public void setCusId(String cusId) {
@@ -54,5 +62,10 @@ public class Order {
         String msg = String.format("%s,%s,%s,%d,%s,%s",
                 ordId , cusId , proId , quantity , date , status) ;
         return msg ;
+    }
+
+    @Override
+    public int compareTo(Order o) {
+        return this.cusId.compareTo(o.getCusId()) ;
     }
 }

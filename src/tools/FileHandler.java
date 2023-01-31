@@ -36,14 +36,14 @@ public class FileHandler {
         return dta;
     }
 
-    public static boolean writeToFile(String filePath, ArrayList<Object> dta) {
+    public static boolean writeToFile(String filePath, ArrayList<String> dta) {
         String _path = initPath(filePath);
         try {
             File file = new File(_path);
             file.createNewFile();
             FileWriter writer = new FileWriter(file);
-            for (Object line : dta) {
-                writer.write(line.toString());
+            for (String line : dta) {
+                writer.write(line);
             }
             writer.close();
         } catch (IOException e) {

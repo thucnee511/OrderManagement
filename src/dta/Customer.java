@@ -10,7 +10,7 @@ import java.util.Comparator;
  *
  * @author Administrator
  */
-public class Customer{
+public class Customer {
     private String id ;
     private String name ;
     private String address ;

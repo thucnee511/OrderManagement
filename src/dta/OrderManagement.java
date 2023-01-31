@@ -5,7 +5,9 @@
 package dta;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import tools.*;
+import ui.Menu;
 
 /**
  *
@@ -25,6 +27,139 @@ public class OrderManagement {
 
     public OrderManagement() {
         this.init();
+    }
+
+    public void printAllProducts() {
+        products.forEach((item) -> {
+            System.out.println(item.toString());
+        });
+    }
+
+    public void printAllCustomers() {
+        customers.forEach((item) -> {
+            System.out.println(item.toString());
+        });
+    }
+
+    public void searchCustomerById() {
+        String cusId = InputHandler.getString("Enter customer's id: ", "Unavailable id", CUSIDREG);
+        if (searchCustomerIndexById(cusId) == -1) {
+            System.out.println("This customer does not exist");
+        } else {
+            Customer cus = searchCustomerObjectById(cusId);
+            System.out.println(cus.toString());
+        }
+    }
+
+    public void addNewCustomer() {
+        while (true) {
+            String cusId = InputHandler.getString("Enter customer's id: ", "Unavailable id", CUSIDREG);
+            if (searchCustomerObjectById(cusId) == null) {
+                String cusName = InputHandler.getString("Enter customer's name: ", "Unavailable name");
+                String cusAddress = InputHandler.getString("Enter customer's address", "Unavailble address");
+                String cusPhoneNum = InputHandler.getString("Enter customer's phone numer: ", "Unavailble phone number", 10, 12);
+                customers.add(new Customer(cusId, cusName, cusAddress, cusPhoneNum));
+                if (!addContinously()) {
+                    return;
+                }
+            } else {
+                System.out.println("This customer's id already existed");
+            }
+        }
+    }
+
+    public void updateCustomer() {
+        String cusId = InputHandler.getString("Enter customer's id: ", "Unavailable id", CUSIDREG);
+        Customer cus = searchCustomerObjectById(cusId);
+        if (cus != null) {
+            String cusName = InputHandler.getString("Enter customer's name: ");
+            String cusAddress = InputHandler.getString("Enter customer's address");
+            String cusPhoneNum = InputHandler.getString("Enter customer's phone numer: ");
+            if (!cusPhoneNum.isEmpty()) {
+                int len = cusPhoneNum.length();
+                if (len < 10 || len > 12) {
+                    System.out.println("Update customer failed! Unavailable phone number");
+                    return;
+                } else {
+                    cus.setPhoneNumber(cusPhoneNum);
+                }
+            }
+            if (!cusName.isEmpty()) {
+                cus.setName(cusName);
+            }
+            if (!cusAddress.isEmpty()) {
+                cus.setAddress(cusAddress);
+            }
+            System.out.println("Update successfully: " + cus.toString());
+        } else {
+            System.out.println("Customer does not exist");
+        }
+    }
+
+    public void saveCustomersToFile() {
+        ArrayList<String> dta = new ArrayList<>();
+        customers.forEach((item) -> {
+            dta.add(item.toString());
+        });
+        FileHandler.writeToFile(CUSFILEPATH, dta);
+    }
+
+    public void printAllOrders() {
+        Collections.sort(orders);
+        orders.forEach((item) -> {
+            System.out.println(item.toString());
+        });
+    }
+
+    public void printAllPendingOrders() {
+        orders.forEach((item) -> {
+            if (!item.isStatus()) {
+                System.out.println(item.toString());
+            }
+        });
+    }
+    
+    public void addNewOrder(){
+        
+    }
+    
+    public void updateOrder(){
+        
+    }
+    
+    public void saveOrdersToFile(){
+        ArrayList<String> dta = new ArrayList<>();
+        orders.forEach((item) -> {
+            dta.add(item.toString());
+        });
+        FileHandler.writeToFile(CUSFILEPATH, dta);
+    }
+
+    private boolean addContinously() {
+        Menu cont = new Menu("Countinously add new ?");
+        cont.addOption("Yes");
+        cont.addOption("No");
+        cont.printMenu();
+        int choice = cont.getChoice();
+        return choice == 1;
+    }
+
+    private int searchCustomerIndexById(String cusId) {
+        for (Customer item : customers) {
+            if ((item.getId()).equals(cusId)) {
+                return customers.indexOf(item);
+            }
+        }
+        return -1;
+    }
+
+    private Customer searchCustomerObjectById(String cusId) {
+        int index = searchCustomerIndexById(cusId);
+        if (index == -1) {
+            return null;
+        } else {
+            return customers.get(index);
+        }
     }
 
     private void init() {

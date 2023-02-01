@@ -37,6 +37,7 @@ public class Menu {
                 System.out.print("Choose an option: ");
                 int choice = Integer.parseInt(sc.nextLine()) ;
                 if (choice < 1 || choice > options.size()) throw new Exception() ;
+                return choice ;
             }catch(NumberFormatException e){
                 System.out.println("Option must be an integer number!");
             }catch(Exception e){

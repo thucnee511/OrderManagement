@@ -5,6 +5,7 @@
 package runtime;
 
 import dta.OrderManagement;
+import tools.InputHandler;
 import ui.Menu;
 
 /**
@@ -81,10 +82,11 @@ public class Procedure {
                     om.saveOrdersToFile();
                     break;
                 case 12:
-                    break;
+                    return;
                 default:
                     break;
             }
+            InputHandler.getString("Press enter to continue") ;
         }
     }
 }

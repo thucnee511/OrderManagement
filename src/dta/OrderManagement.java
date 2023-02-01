@@ -6,7 +6,6 @@ package dta;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import tools.*;
 import ui.Menu;
 
@@ -19,9 +18,8 @@ public class OrderManagement {
     private final String CUSFILEPATH = "/src/files/customers.txt";
     private final String PROFILEPATH = "/src/files/products.txt";
     private final String ORDFILEPATH = "/src/files/orders.txt";
-    private final String CUSIDREG = "C\\d{4}";
-    private final String PROIDREG = "P\\d{4}";
-    private final String ORDIDREG = "O\\d{4}";
+    private final String CUSIDREG = "C\\d*";
+    private final String ORDIDREG = "O\\d*";
     private ArrayList<Customer> customers = new ArrayList<>();
     private ArrayList<Product> products = new ArrayList<>();
     private ArrayList<Order> orders = new ArrayList<>();
@@ -45,7 +43,8 @@ public class OrderManagement {
     }
 
     public void searchCustomerById() {
-        String cusId = InputHandler.getString("Enter customer's id: ", "Unavailable id", CUSIDREG);
+        System.out.println("Search a customer by id");
+        String cusId = InputHandler.getString("Enter customer's id: ", "Invalid id", CUSIDREG);
         if (searchCustomerIndexById(cusId) == -1) {
             System.out.println("This customer does not exist");
         } else {
@@ -56,32 +55,34 @@ public class OrderManagement {
 
     public void addNewCustomer() {
         while (true) {
-            String cusId = InputHandler.getString("Enter customer's id: ", "Unavailable id", CUSIDREG);
+            System.out.println("Add new customer");
+            String cusId = InputHandler.getString("Enter customer's id: ", "Invalid id", CUSIDREG);
             if (searchCustomerObjectById(cusId) == null) {
-                String cusName = InputHandler.getString("Enter customer's name: ", "Unavailable name");
-                String cusAddress = InputHandler.getString("Enter customer's address", "Unavailble address");
+                String cusName = InputHandler.getString("Enter customer's name: ", "Invalid name");
+                String cusAddress = InputHandler.getString("Enter customer's address: ", "Unavailble address");
                 String cusPhoneNum = InputHandler.getString("Enter customer's phone numer: ", "Unavailble phone number", 10, 12);
                 customers.add(new Customer(cusId, cusName, cusAddress, cusPhoneNum));
                 if (!addContinously()) {
                     return;
                 }
             } else {
-                System.out.println("This customer's id already existed");
+                System.out.println("This customer's id already existed!");
             }
         }
     }
 
     public void updateCustomer() {
-        String cusId = InputHandler.getString("Enter customer's id: ", "Unavailable id", CUSIDREG);
+        System.out.println("Update customer");
+        String cusId = InputHandler.getString("Enter customer's id: ", "Invalid id", CUSIDREG);
         Customer cus = searchCustomerObjectById(cusId);
         if (cus != null) {
             String cusName = InputHandler.getString("Enter customer's name: ");
-            String cusAddress = InputHandler.getString("Enter customer's address");
+            String cusAddress = InputHandler.getString("Enter customer's address: ");
             String cusPhoneNum = InputHandler.getString("Enter customer's phone numer: ");
             if (!cusPhoneNum.isEmpty()) {
                 int len = cusPhoneNum.length();
                 if (len < 10 || len > 12) {
-                    System.out.println("Update customer failed! Unavailable phone number");
+                    System.out.println("Update customer failed! Invalid phone number!");
                     return;
                 } else {
                     cus.setPhoneNumber(cusPhoneNum);
@@ -112,6 +113,7 @@ public class OrderManagement {
     }
 
     public void printAllOrders() {
+        System.out.println("All orders");
         Collections.sort(orders);
         orders.forEach((item) -> {
             System.out.println(item.toString());
@@ -119,6 +121,7 @@ public class OrderManagement {
     }
 
     public void printAllPendingOrders() {
+        System.out.println("All pending orders");
         orders.forEach((item) -> {
             if (!item.isStatus()) {
                 System.out.println(item.toString());
@@ -128,7 +131,8 @@ public class OrderManagement {
 
     public void addNewOrder() {
         while (true) {
-            String ordId = InputHandler.getString("Enter order's id: ", "Unavailable id", ORDIDREG);
+            System.out.println("Add new order");
+            String ordId = InputHandler.getString("Enter order's id: ", "Invalid id", ORDIDREG);
             if (searchOrderObjectById(ordId) == null) {
                 String cusId = customers.get(getCustomerIdSubMenu()).getId();
                 String proId = products.get(getProductIdSubMenu()).getId();
@@ -146,7 +150,8 @@ public class OrderManagement {
     }
 
     public void updateOrder() {
-        String ordId = InputHandler.getString("Enter ord's id: ", "Unavailable id", ORDIDREG);
+        System.out.println("Update order");
+        String ordId = InputHandler.getString("Enter ord's id: ", "Invalid id", ORDIDREG);
         Order ord = searchOrderObjectById(ordId);
         if (ord != null) {
             String status = InputHandler.getString("Enter order's new status: ");
@@ -165,15 +170,15 @@ public class OrderManagement {
     }
     
     public void deleteOrder(){
-        String ordId = InputHandler.getString("Enter ord's id: ", "Unavailable id", ORDIDREG);
+        System.out.println("");
+        String ordId = InputHandler.getString("Enter ord's id: ", "Invalid id", ORDIDREG);
         Order ord = searchOrderObjectById(ordId);
         if (ord == null){
             System.out.println("Order does not exist");
         }else{
             System.out.println(ord.toString());
-            System.out.print("Do you want to delete this order?");
-            if(Menu.getYesOrNo("")) orders.remove(ord) ;
-            System.out.println("Delete successfully!");
+            if(Menu.getYesOrNo("Do you want to delete this order?")) orders.remove(ord) ;
+            System.out.println("Order delete successfully!");
         }
     }
 
@@ -249,27 +254,6 @@ public class OrderManagement {
             return null;
         } else {
             return customers.get(index);
-        }
-    }
-
-    private void init() {
-        ArrayList<String> dta = new ArrayList<>();
-        dta.addAll(FileHandler.readFromFile(CUSFILEPATH));
-        dta.addAll(FileHandler.readFromFile(PROFILEPATH));
-        dta.addAll(FileHandler.readFromFile(ORDFILEPATH));
-        for(String item : dta){
-            String data[] = item.split(",");
-            if (data[0].matches(CUSIDREG)) {
-                customers.add(new Customer(data[0], data[1], data[2], data[3]));
-            } else if (data[0].matches(PROIDREG)) {
-                products.add(new Product(data[0], data[1], data[2], data[3],
-                        Double.parseDouble(data[4])));
-            } else {
-                orders.add(new Order(data[0], data[1], data[2],
-                        Integer.parseInt(data[3]),
-                        data[4],
-                        Boolean.parseBoolean(data[5])));
-            }
         }
     }
 

@@ -101,7 +101,11 @@ public class OrderManagement {
         customers.forEach((item) -> {
             dta.add(item.toString());
         });
-        FileHandler.writeToFile(CUSFILEPATH, dta);
+        if (FileHandler.writeToFile(CUSFILEPATH, dta)){
+            System.out.println("Save file successfully");
+        }else{
+            System.out.println("Save file failed");
+        }
     }
 
     public void printAllOrders() {
@@ -175,7 +179,11 @@ public class OrderManagement {
         orders.forEach((item) -> {
             dta.add(item.toString());
         });
-        FileHandler.writeToFile(CUSFILEPATH, dta);
+        if (FileHandler.writeToFile(ORDFILEPATH, dta)){
+            System.out.println("Save file successfully");
+        }else{
+            System.out.println("Save file failed");
+        }
     }
 
     private int getCustomerIdSubMenu() {

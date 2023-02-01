@@ -98,7 +98,7 @@ public class InputHandler {
 
     public static String getString(String inputMsg) {
         System.out.print(inputMsg);
-        return sc.nextLine() ;
+        return sc.nextLine();
     }
 
     public static String getString(String inputMsg, String errorMsg, String regex) {
@@ -129,6 +129,97 @@ public class InputHandler {
             } catch (Exception e) {
                 System.out.println(errorMsg);
             }
+        }
+    }
+
+    public static String getDateDMY(String inputMsg) {
+        String regex = "\\d{2}/\\d{2}\\d{4}";
+        while (true) {
+            try {
+                System.out.print(inputMsg);
+                String inputStr = sc.nextLine();
+                if (!inputStr.matches(regex)) {
+                    throw new Exception();
+                }
+                String date[] = inputStr.split("/");
+                int day = Integer.parseInt(date[0]);
+                int month = Integer.parseInt(date[1]);
+                int year = Integer.parseInt(date[2]);
+                if (checkValidDate(day, month, year)) {
+                    return inputStr;
+                } else {
+                    throw new Exception();
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid date: dd/mm/yyyy");
+            }
+        }
+    }
+
+    public static String getDateMDY(String inputMsg) {
+        String regex = "\\d{2}/\\d{2}\\d{4}";
+        while (true) {
+            try {
+                System.out.print(inputMsg);
+                String inputStr = sc.nextLine();
+                if (!inputStr.matches(regex)) {
+                    throw new Exception();
+                }
+                String date[] = inputStr.split("/");
+                int month = Integer.parseInt(date[0]);
+                int day = Integer.parseInt(date[1]);
+                int year = Integer.parseInt(date[2]);
+                if (checkValidDate(day, month, year)) {
+                    return inputStr;
+                } else {
+                    throw new Exception();
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid date: mm/dd/yyyy");
+            }
+        }
+    }
+    
+    public static boolean getBoolean(String inputMsg){
+        while (true) {
+            try {
+                System.out.print(inputMsg);
+                boolean inputBool = Boolean.parseBoolean(sc.nextLine());
+                return inputBool;
+            } catch (Exception e) {
+                System.out.println("True or False!!");
+            }
+        }
+    }
+
+    private static boolean checkValidDate(int day, int month, int year) {
+        boolean leap = false;
+        if (year < 0) {
+            return false;
+        }
+        if (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)) {
+            leap = true;
+        }
+        if (month == 2) {
+            if (leap) {
+                return day <= 29;
+            } else {
+                return day <= 28;
+            }
+        } else if (month < 8) {
+            if (month % 2 == 1) {
+                return day <= 31;
+            } else {
+                return day <= 30;
+            }
+        } else if (month <= 12) {
+            if (month % 2 == 0) {
+                return day <= 31;
+            } else {
+                return day <= 30;
+            }
+        } else {
+            return false;
         }
     }
 }

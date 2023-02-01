@@ -16,7 +16,7 @@ public class Order implements Comparable<Order>{
     private String date ;
     private boolean status = false;
 
-    public Order(String ordId, String cusId, String proId, int quantity, String date, boolean status) {
+    public Order(String ordId, String cusId, String proId, int quantity , String date, boolean status) {
         this.ordId = ordId;
         this.cusId = cusId;
         this.proId = proId;
@@ -35,22 +35,6 @@ public class Order implements Comparable<Order>{
 
     public boolean isStatus() {
         return status;
-    }
-
-    public void setCusId(String cusId) {
-        this.cusId = cusId;
-    }
-
-    public void setProId(String proId) {
-        this.proId = proId;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
     }
 
     public void setStatus(boolean status) {

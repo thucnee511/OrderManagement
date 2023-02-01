@@ -45,6 +45,14 @@ public class Menu {
         }
     }
     
+    public static boolean getYesOrNo(String title){
+        Menu sub = new Menu(title); 
+        sub.addOption("Yes") ;
+        sub.addOption("No") ;
+        sub.printMenu();
+        return sub.getChoice() == 1;
+    }
+    
     @Override
     public String toString(){
         String msg = String.format("[Menu] : %s", title) ;

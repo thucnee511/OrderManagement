@@ -118,21 +118,100 @@ public class OrderManagement {
             }
         });
     }
-    
-    public void addNewOrder(){
-        
+
+    public void addNewOrder() {
+        while (true) {
+            String ordId = InputHandler.getString("Enter order's id: ", "Unavailable id", ORDIDREG);
+            if (searchOrderObjectById(ordId) == null) {
+                String cusId = customers.get(getCustomerIdSubMenu()).getId();
+                String proId = products.get(getProductIdSubMenu()).getId();
+                int quantity = InputHandler.getPositiveInt("Enter order's quantity: ", "Unavailble quantity number");
+                String date = InputHandler.getDateMDY("Enter order's date: ");
+                boolean status = InputHandler.getBoolean("Enter order's status: ");
+                orders.add(new Order(ordId, cusId, proId, quantity, date, status));
+                if (!addContinously()) {
+                    return;
+                }
+            } else {
+                System.out.println("This order's id already existed!");
+            }
+        }
+    }
+
+    public void updateOrder() {
+        String ordId = InputHandler.getString("Enter ord's id: ", "Unavailable id", ORDIDREG);
+        Order ord = searchOrderObjectById(ordId);
+        if (ord != null) {
+            String status = InputHandler.getString("Enter order's new status: ");
+            if (!status.isEmpty()) {
+                try {
+                    boolean _status = Boolean.parseBoolean(status);
+                    ord.setStatus(_status);
+                } catch (Exception e) {
+                    System.out.println("Update failed: Status must be true or false!");
+                }
+                System.out.println("Update successfully: " + ord.toString());
+            }
+        } else {
+            System.out.println("Order does not exist");
+        }
     }
     
-    public void updateOrder(){
-        
+    public void deleteOrder(){
+        String ordId = InputHandler.getString("Enter ord's id: ", "Unavailable id", ORDIDREG);
+        Order ord = searchOrderObjectById(ordId);
+        if (ord == null){
+            System.out.println("Order does not exist");
+        }else{
+            System.out.println(ord.toString());
+            System.out.print("Do you want to delete this order?");
+            if(Menu.getYesOrNo("")) orders.remove(ord) ;
+            System.out.println("Delete successfully!");
+        }
     }
-    
-    public void saveOrdersToFile(){
+
+    public void saveOrdersToFile() {
         ArrayList<String> dta = new ArrayList<>();
         orders.forEach((item) -> {
             dta.add(item.toString());
         });
         FileHandler.writeToFile(CUSFILEPATH, dta);
+    }
+
+    private int getCustomerIdSubMenu() {
+        System.out.println("Customer id list:");
+        customers.forEach((item) -> {
+            System.out.println(customers.indexOf(item) + 1 + ". " + item.getId());
+        });
+        int choice = InputHandler.getInt("Choose a customer id", "Choose a number!", 1, customers.size());
+        return choice - 1;
+    }
+
+    private int getProductIdSubMenu() {
+        System.out.println("Customer id list:");
+        products.forEach((item) -> {
+            System.out.println(products.indexOf(item) + 1 + ". " + item.getId());
+        });
+        int choice = InputHandler.getInt("Choose a customer id", "Choose a number!", 1, products.size());
+        return choice - 1;
+    }
+
+    private int searchOrderIndexById(String ordId) {
+        for (Order item : orders) {
+            if ((item.getOrdId()).equals(ordId)) {
+                return orders.indexOf(item);
+            }
+        }
+        return -1;
+    }
+
+    private Order searchOrderObjectById(String ordId) {
+        int index = searchOrderIndexById(ordId);
+        if (index == -1) {
+            return null;
+        } else {
+            return orders.get(index);
+        }
     }
 
     private boolean addContinously() {

@@ -6,6 +6,7 @@ package dta;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import tools.*;
 import ui.Menu;
 
@@ -26,7 +27,9 @@ public class OrderManagement {
     private ArrayList<Order> orders = new ArrayList<>();
 
     public OrderManagement() {
-        this.init();
+        customers = getCusDta() ;
+        orders = getOrdDta() ;
+        products = getProDta() ;
     }
 
     public void printAllProducts() {
@@ -254,7 +257,7 @@ public class OrderManagement {
         dta.addAll(FileHandler.readFromFile(CUSFILEPATH));
         dta.addAll(FileHandler.readFromFile(PROFILEPATH));
         dta.addAll(FileHandler.readFromFile(ORDFILEPATH));
-        dta.forEach((item -> {
+        for(String item : dta){
             String data[] = item.split(",");
             if (data[0].matches(CUSIDREG)) {
                 customers.add(new Customer(data[0], data[1], data[2], data[3]));
@@ -267,7 +270,7 @@ public class OrderManagement {
                         data[4],
                         Boolean.parseBoolean(data[5])));
             }
-        }));
+        }
     }
 
     private ArrayList<Customer> getCusDta() {

@@ -33,72 +33,57 @@ public class Procedure {
             menu.printMenu();
             int choice = menu.getChoice();
             switch (choice) {
-                case 1: {
+                case 1:
                     om.printAllProducts();
                     break;
-                }
-                case 2: {
+                case 2:
                     om.printAllCustomers();
                     break;
-                }
-                case 3: {
+                case 3:
                     om.searchCustomerById();
                     break;
-                }
-                case 4: {
+                case 4:
                     om.addNewCustomer();
                     break;
-                }
-                case 5: {
+                case 5:
                     om.updateCustomer();
                     break;
-                }
-                case 6: {
+                case 6:
                     om.saveCustomersToFile();
                     break;
-                }
-                case 7: {
+                case 7:
                     om.printAllOrders();
                     break;
-                }
-                case 8: {
+                case 8:
                     om.printAllPendingOrders();
                     break;
-                }
-                case 9: {
+                case 9:
                     om.addNewOrder();
                     break;
-                }
-                case 10: {
+                case 10:
                     Menu subMenu = new Menu("Update order");
                     subMenu.addOption("Update order infomation");
                     subMenu.addOption("Delete order");
                     while (true) {
                         subMenu.printMenu();
                         int _choice = subMenu.getChoice();
-                        switch (_choice) {
-                            case 1: {
-                                om.updateOrder();
-                                break;
-                            }
-                            case 2: {
-                                om.deleteOrder();
-                                break;
-                            }
+                        if (_choice == 1) {
+                            om.updateOrder();
+                        } else if (_choice == 2) {
+                            om.deleteOrder();
                         }
                         if (Menu.getYesOrNo("Back to main menu?")) {
                             break;
                         }
                     }
                     break;
-                }
-                case 11: {
+                case 11:
                     om.saveOrdersToFile();
                     break;
-                }
-                case 12: {
-                    return;
-                }
+                case 12:
+                    break;
+                default:
+                    break;
             }
         }
     }
